@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHARGENODE EV | Control Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <h2>CHARGENODE</h2>
+          <p>EV CONTROL ROOM</p>
+        </div>
+      </div>
+
+      <p class="menu-label">WORKSPACE</p>
+      <button class="nav-link active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav-link" data-page="stations">▤ Charging Stations</button>
+      <button class="nav-link" data-page="charging">ϟ Start Charging</button>
+      <button class="nav-link" data-page="history">◷ Transaction History</button>
+      <button class="nav-link" data-page="blockchain">⬡ Blockchain Verification</button>
+
+      <div class="sidebar-bottom">
+        <span class="status-dot"></span> Demo network online
+        <p>Software simulation · v1.0</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">EV CHARGING NETWORK / SIMULATOR</p>
+          <h1 id="page-title">Dashboard</h1>
+        </div>
+        <div class="network-pill"><span class="status-dot"></span> Network Online</div>
+      </header>
+
+      <section id="dashboard" class="page active-page">
+        <div class="welcome">
+          <div>
+            <p class="eyebrow">SYSTEM OVERVIEW</p>
+            <h2>Smart charging. Verifiable records.</h2>
+            <p>Monitor energy usage, charging sessions, and transaction integrity.</p>
+          </div>
+          <button class="primary-btn" data-go="charging">+ Start a session</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <p>Energy Delivered</p>
+            <h2 id="stat-energy">0.00 <small>kWh</small></h2>
+            <span>Across saved sessions</span>
+          </article>
+          <article class="stat-card">
+            <p>Sessions Logged</p>
+            <h2 id="stat-sessions">0</h2>
+            <span>Stored in this browser</span>
+          </article>
+          <article class="stat-card">
+            <p>Total Charging Cost</p>
+            <h2 id="stat-cost">$0.00</h2>
+            <span>Calculated from energy usage</span>
+          </article>
+          <article class="stat-card">
+            <p>Available Nodes</p>
+            <h2>4 <small>/ 4</small></h2>
+            <span>Demo stations configured</span>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h3>Network Status</h3><p>Configured charging stations</p></div>
+              <span class="tag">DEMO</span>
+            </div>
+            <div id="dashboard-stations" class="station-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h3>Recent Transactions</h3><p>Your latest saved sessions</p></div>
+              <button class="text-btn" data-go="history">View all →</button>
+            </div>
+            <div id="recent-transactions"></div>
+          </article>
+        </div>
+        <p class="notice">Note: This project is a browser-based simulation. It does not control physical EV chargers.</p>
+      </section>
+
+      <section id="stations" class="page">
+        <div class="section-intro">
+          <h2>Charging Stations</h2>
+          <p>Choose a configured node for your simulated charging session.</p>
+        </div>
+        <div id="all-stations" class="station-grid"></div>
+      </section>
+
+      <section id="charging" class="page">
+        <div class="section-intro">
+          <h2>Start Charging</h2>
+          <p>Simulate an EV charging session and save its transaction record.</p>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Session Configuration</h3><p>Set your charging parameters</p></div></div>
+            <form id="charging-form">
+              <label for="user-id">Demo User ID</label>
+              <input id="user-id" value="USER-001" required maxlength="40">
+
+              <label for="station-select">Charging Station</label>
+              <select id="station-select" required></select>
+
+              <label for="tariff">Tariff (USD per kWh)</label>
+              <input id="tariff" type="number" value="0.20" min="0.01" max="10" step="0.01" required>
+
+              <label for="power-select">Simulated Charging Power</label>
+              <select id="power-select">
+                <option value="7">7 kW — Home charger</option>
+                <option value="22" selected>22 kW — AC charger</option>
+                <option value="50">50 kW — DC fast charger</option>
+              </select>
+
+              <button class="primary-btn full-btn" id="start-btn" type="submit">▶ Start Charging Session</button>
+              <button class="danger-btn full-btn" id="stop-btn" type="button" disabled>■ Stop &amp; Save Session</button>
+              <p id="charging-message" class="form-message">Ready to start a demo session.</p>
+            </form>
+          </article>
+
+          <article class="panel telemetry">
+            <div class="panel-heading"><div><h3>Live Telemetry</h3><p>Simulated readings update every second</p></div><span id="live-tag" class="tag">IDLE</span></div>
+            <p class="telemetry-label">Energy Delivered</p>
+            <h2 class="big-number"><span id="live-energy">0.000</span> <small>kWh</small></h2>
+            <div class="progress-track"><div id="energy-progress" class="progress-fill"></div></div>
+            <div class="telemetry-row"><span>Power</span><strong id="live-power">0.0 kW</strong></div>
+            <div class="telemetry-row"><span>Duration</span><strong id="live-duration">00:00:00</strong></div>
+            <div class="telemetry-row"><span>Estimated Cost</span><strong id="live-cost">$0.00</strong></div>
+            <div class="telemetry-row"><span>Selected Node</span><strong id="live-station">None</strong></div>
+            <div class="callout">The simulator advances time faster than a real charging session so you can demonstrate the calculations.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="history" class="page">
+        <div class="section-intro">
+          <h2>Transaction History</h2>
+          <p>Saved charging sessions and their integrity hashes.</p>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Saved Sessions</h3><p>Records saved in local browser storage</p></div><button id="export-btn" class="secondary-btn">Export JSON</button></div>
+          <div id="history-table"></div>
+        </article>
+      </section>
+
+      <section id="blockchain" class="page">
+        <div class="section-intro">
+          <h2>Blockchain Verification</h2>
+          <p>Check whether saved session data still matches its recorded SHA-256 hash.</p>
+        </div>
+        <div class="verification-summary">
+          <article class="stat-card"><p>Saved Records</p><h2 id="verify-total">0</h2></article>
+          <article class="stat-card"><p>Passed Checks</p><h2 id="verify-passed">0</h2></article>
+          <article class="stat-card"><p>Failed Checks</p><h2 id="verify-failed">0</h2></article>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Integrity Check</h3><p>Recalculate each record's hash and compare it with the saved hash.</p></div><button class="primary-btn" id="verify-btn">Verify All Records</button></div>
+          <div id="verification-results"><p class="empty-state">Click “Verify All Records” to run a check.</p></div>
+        </article>
+        <div class="callout warning">
+          Important: This demonstrates hash-based tamper detection, not a real blockchain. The records and hashes are stored in your browser and can be changed by someone with access to the browser data. A real blockchain requires a backend or smart contract.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
