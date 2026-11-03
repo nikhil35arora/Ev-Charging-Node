@@ -3,7 +3,7 @@
 
 
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "https://ev-charging-node.onrender.com/api";
 
 const stations = [
   { id: "STN-EV-101", name: "North Garage", power: 22, type: "AC Charger" },
